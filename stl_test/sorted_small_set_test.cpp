@@ -1,6 +1,6 @@
 
-#include <iostream>
 #include "../src/sorted_small_set.h"
+#include <iostream>
 
 using namespace std;
 
@@ -11,11 +11,11 @@ int main() {
 
   int b[] = {9, 8, 7, 6, 5, 4, 3, 2, 1};
 
-  for(size_t i = 0;i < sizeof(b) / sizeof(int);i++) {
+  for (size_t i = 0; i < sizeof(b) / sizeof(int); i++) {
     sss.Insert(b[i]);
 
     int *begin_p = sss.GetBegin();
-    while(begin_p != sss.GetEnd()) {
+    while (begin_p != sss.GetEnd()) {
       cout << *begin_p << " ";
 
       begin_p++;
@@ -26,7 +26,7 @@ int main() {
 
   cout << "Final result: " << endl;
 
-  while(sss.IsEmpty() == false) {
+  while (sss.IsEmpty() == false) {
     cout << sss.PopFront() << " ";
   }
 

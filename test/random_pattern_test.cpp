@@ -27,7 +27,7 @@ void RandomBtreeMultimapInsertSpeedTest(size_t key_num) {
 
   // We loop for keynum * 2 because in average half of the insertion
   // will hit an empty slot
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
 
     test_map.insert((long)key, (long)key);
@@ -37,7 +37,8 @@ void RandomBtreeMultimapInsertSpeedTest(size_t key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "stx::btree_multimap: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "stx::btree_multimap: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million random insertion/sec" << "\n";
 
   // Then test random read after random insert
@@ -46,12 +47,12 @@ void RandomBtreeMultimapInsertSpeedTest(size_t key_num) {
 
   start = std::chrono::system_clock::now();
 
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
 
     auto it_pair = test_map.equal_range(key);
 
-    for(auto it = it_pair.first;it != it_pair.second;it++) {
+    for (auto it = it_pair.first; it != it_pair.second; it++) {
       v.push_back(it->second);
     }
 
@@ -61,7 +62,8 @@ void RandomBtreeMultimapInsertSpeedTest(size_t key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "stx::btree_multimap: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "stx::btree_multimap: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million read after random insert/sec" << "\n";
 
   return;
@@ -84,7 +86,7 @@ void RandomCuckooHashMapInsertSpeedTest(size_t key_num) {
 
   // We loop for keynum * 2 because in average half of the insertion
   // will hit an empty slot
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
 
     test_map.insert((long)key, (long)key);
@@ -94,7 +96,8 @@ void RandomCuckooHashMapInsertSpeedTest(size_t key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "cuckoohash_map: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "cuckoohash_map: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million random insertion/sec" << "\n";
 
   // Then test random read after random insert
@@ -103,10 +106,10 @@ void RandomCuckooHashMapInsertSpeedTest(size_t key_num) {
 
   start = std::chrono::system_clock::now();
 
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
     long int ret;
-    
+
     test_map.find(key, ret);
 
     v.push_back(ret);
@@ -117,12 +120,12 @@ void RandomCuckooHashMapInsertSpeedTest(size_t key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "cuckoohash_map: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "cuckoohash_map: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million read after random insert/sec" << "\n";
 
   return;
 }
-
 
 /*
  * RandomInsertSpeedTest() - Tests how fast it is to insert keys randomly
@@ -138,9 +141,9 @@ void RandomInsertSpeedTest(TreeType *t, size_t key_num) {
 
   // We loop for keynum * 2 because in average half of the insertion
   // will hit an empty slot
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
-    
+
     t->Insert(key, key);
   }
 
@@ -148,7 +151,8 @@ void RandomInsertSpeedTest(TreeType *t, size_t key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "BwTree: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "BwTree: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million random insertion/sec" << "\n";
 
   // Then test random read after random insert
@@ -157,7 +161,7 @@ void RandomInsertSpeedTest(TreeType *t, size_t key_num) {
 
   start = std::chrono::system_clock::now();
 
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
 
     t->GetValue(key, v);
@@ -168,14 +172,15 @@ void RandomInsertSpeedTest(TreeType *t, size_t key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "BwTree: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "BwTree: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million random read after random insert/sec" << "\n";
 
   // Measure the overhead
 
   start = std::chrono::system_clock::now();
 
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
 
     v.push_back(key);
@@ -207,7 +212,7 @@ void RandomInsertSeqReadSpeedTest(TreeType *t, size_t key_num) {
 
   // We loop for keynum * 2 because in average half of the insertion
   // will hit an empty slot
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
 
     t->Insert(key, key);
@@ -217,7 +222,8 @@ void RandomInsertSeqReadSpeedTest(TreeType *t, size_t key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "BwTree: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "BwTree: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million random insertion/sec" << "\n";
 
   // Then test random read after random insert
@@ -226,7 +232,7 @@ void RandomInsertSeqReadSpeedTest(TreeType *t, size_t key_num) {
 
   start = std::chrono::system_clock::now();
 
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     t->GetValue(i, v);
 
     v.clear();
@@ -235,14 +241,15 @@ void RandomInsertSeqReadSpeedTest(TreeType *t, size_t key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "BwTree: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "BwTree: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million seq read after random insert/sec" << "\n";
 
   return;
 }
 
 /*
- * SeqInsertRandomReadSpeedTest() - Tests how fast it is to insert keys 
+ * SeqInsertRandomReadSpeedTest() - Tests how fast it is to insert keys
  *                                  sequentially and read them randomly
  */
 void SeqInsertRandomReadSpeedTest(TreeType *t, size_t key_num) {
@@ -256,7 +263,7 @@ void SeqInsertRandomReadSpeedTest(TreeType *t, size_t key_num) {
 
   // We loop for keynum * 2 because in average half of the insertion
   // will hit an empty slot
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     t->Insert(i, i);
   }
 
@@ -264,7 +271,8 @@ void SeqInsertRandomReadSpeedTest(TreeType *t, size_t key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "BwTree: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "BwTree: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million seq insertion/sec" << "\n";
 
   // Then test random read after random insert
@@ -273,7 +281,7 @@ void SeqInsertRandomReadSpeedTest(TreeType *t, size_t key_num) {
 
   start = std::chrono::system_clock::now();
 
-  for(size_t i = 0;i < key_num * 2;i++) {
+  for (size_t i = 0; i < key_num * 2; i++) {
     int key = uniform_dist(e1);
 
     t->GetValue(key, v);
@@ -284,12 +292,12 @@ void SeqInsertRandomReadSpeedTest(TreeType *t, size_t key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "BwTree: at least " << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "BwTree: at least "
+            << (key_num * 2.0 / (1024 * 1024)) / elapsed_seconds.count()
             << " million random read after seq insert/sec" << "\n";
 
   return;
 }
-
 
 /*
  * InfiniteRandomInsertTest() - Inserts in a 10M key space randomly
@@ -309,24 +317,22 @@ void InfiniteRandomInsertTest(TreeType *t) {
   Timer timer{true};
   size_t last_count = 0;
 
-  while(1) {
+  while (1) {
     int key = uniform_dist(e1);
 
     success += t->Insert(key, key);
-    
+
     count++;
-    
-    if((count % (1024 * 50)) == 0) {
+
+    if ((count % (1024 * 50)) == 0) {
       double duration = timer.Stop();
-      printf("%lu (%f M) iters; %lu (%f M) succ; %f M/sec  \r",
-             count,
-             (float)count / (1024.0 * 1024.0),
-             success,
+      printf("%lu (%f M) iters; %lu (%f M) succ; %f M/sec  \r", count,
+             (float)count / (1024.0 * 1024.0), success,
              (float)success / (1024.0 * 1024.0),
              (float)(count - last_count) / (1024.0 * 1024.0) / duration);
-      
+
       last_count = count;
-      
+
       // Restart the timer
       timer.Start();
     }
@@ -351,10 +357,11 @@ void RandomInsertTest(uint64_t thread_id, TreeType *t) {
 
   static std::atomic<size_t> insert_success_counter;
 
-  while(insert_success_counter.load() < key_num) {
+  while (insert_success_counter.load() < key_num) {
     int key = uniform_dist(e1);
 
-    if(t->Insert(key, key)) insert_success_counter.fetch_add(1);
+    if (t->Insert(key, key))
+      insert_success_counter.fetch_add(1);
   }
 
   printf("Random insert (%lu) finished\n", thread_id);
@@ -369,7 +376,7 @@ void RandomInsertTest(uint64_t thread_id, TreeType *t) {
  * key space is 1M
  */
 void RandomInsertVerify(TreeType *t) {
-  for(int i = 0;i < 1024 * 1024;i++) {
+  for (int i = 0; i < 1024 * 1024; i++) {
     auto s = t->GetValue(i);
 
     assert(s.size() == 1);

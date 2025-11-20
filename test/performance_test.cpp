@@ -2,7 +2,7 @@
 /*
  * performance_test.cpp
  *
- * This includes performance test for index structures such as std::map, 
+ * This includes performance test for index structures such as std::map,
  * std::unordered_map, stx::btree and stx::btree_multimap
  */
 
@@ -17,7 +17,7 @@ void TestStdMapInsertReadPerformance(int key_num) {
 
   // Insert 1 million keys into std::map
   std::map<long, long> test_map{};
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     test_map[i] = i;
   }
 
@@ -25,7 +25,8 @@ void TestStdMapInsertReadPerformance(int key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "std::map: " << 1.0 * key_num / (1024 * 1024) / elapsed_seconds.count()
+  std::cout << "std::map: "
+            << 1.0 * key_num / (1024 * 1024) / elapsed_seconds.count()
             << " million insertion/sec" << "\n";
 
   ////////////////////////////////////////////
@@ -36,9 +37,9 @@ void TestStdMapInsertReadPerformance(int key_num) {
   start = std::chrono::system_clock::now();
 
   int iter = 10;
-  for(int j = 0;j < iter;j++) {
+  for (int j = 0; j < iter; j++) {
     // Read 1 million keys from std::map
-    for(int i = 0;i < key_num;i++) {
+    for (int i = 0; i < key_num; i++) {
       long t = test_map[i];
 
       v.push_back(t);
@@ -49,7 +50,8 @@ void TestStdMapInsertReadPerformance(int key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "std::map: " << (1.0 * iter * key_num) / (1024 * 1024) / elapsed_seconds.count()
+  std::cout << "std::map: "
+            << (1.0 * iter * key_num) / (1024 * 1024) / elapsed_seconds.count()
             << " million read/sec" << "\n";
 
   return;
@@ -64,7 +66,7 @@ void TestStdUnorderedMapInsertReadPerformance(int key_num) {
 
   // Insert 1 million keys into std::map
   std::unordered_map<long, long> test_map{};
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     test_map[i] = i;
   }
 
@@ -72,7 +74,8 @@ void TestStdUnorderedMapInsertReadPerformance(int key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "std::unordered_map: " << 1.0 * key_num / (1024 * 1024) / elapsed_seconds.count()
+  std::cout << "std::unordered_map: "
+            << 1.0 * key_num / (1024 * 1024) / elapsed_seconds.count()
             << " million insertion/sec" << "\n";
 
   ////////////////////////////////////////////
@@ -83,9 +86,9 @@ void TestStdUnorderedMapInsertReadPerformance(int key_num) {
   start = std::chrono::system_clock::now();
 
   int iter = 10;
-  for(int j = 0;j < iter;j++) {
+  for (int j = 0; j < iter; j++) {
     // Read 1 million keys from std::map
-    for(int i = 0;i < key_num;i++) {
+    for (int i = 0; i < key_num; i++) {
       long t = test_map[i];
 
       v.push_back(t);
@@ -96,7 +99,8 @@ void TestStdUnorderedMapInsertReadPerformance(int key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "std::unordered_map: " << (1.0 * iter * key_num) / (1024 * 1024) / elapsed_seconds.count()
+  std::cout << "std::unordered_map: "
+            << (1.0 * iter * key_num) / (1024 * 1024) / elapsed_seconds.count()
             << " million read/sec" << "\n";
 
   return;
@@ -109,14 +113,12 @@ void TestBTreeInsertReadPerformance(int key_num) {
   std::chrono::time_point<std::chrono::system_clock> start, end;
 
   // Insert 1 million keys into stx::btree
-  btree<long,
-        long,
-        std::pair<long, long>,
-        KeyComparator> test_map{KeyComparator{1}};
+  btree<long, long, std::pair<long, long>, KeyComparator> test_map{
+      KeyComparator{1}};
 
   start = std::chrono::system_clock::now();
 
-  for(long i = 0;i < key_num;i++) {
+  for (long i = 0; i < key_num; i++) {
     test_map.insert(i, i);
   }
 
@@ -124,7 +126,8 @@ void TestBTreeInsertReadPerformance(int key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "stx::btree: " << 1.0 * key_num / (1024 * 1024) / elapsed_seconds.count()
+  std::cout << "stx::btree: "
+            << 1.0 * key_num / (1024 * 1024) / elapsed_seconds.count()
             << " million insertion/sec" << "\n";
 
   ////////////////////////////////////////////
@@ -135,9 +138,9 @@ void TestBTreeInsertReadPerformance(int key_num) {
   start = std::chrono::system_clock::now();
 
   int iter = 10;
-  for(int j = 0;j < iter;j++) {
+  for (int j = 0; j < iter; j++) {
     // Read keys from stx::btree
-    for(int i = 0;i < key_num;i++) {
+    for (int i = 0; i < key_num; i++) {
       auto it = test_map.find(i);
 
       v.push_back(it->second);
@@ -148,7 +151,8 @@ void TestBTreeInsertReadPerformance(int key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "stx::btree " << (1.0 * iter * key_num) / (1024 * 1024) / elapsed_seconds.count()
+  std::cout << "stx::btree "
+            << (1.0 * iter * key_num) / (1024 * 1024) / elapsed_seconds.count()
             << " million read/sec" << "\n";
 
   return;
@@ -171,7 +175,7 @@ void TestBTreeMultimapInsertReadPerformance(int key_num) {
   start = std::chrono::system_clock::now();
 
   // Insert 1 million keys into stx::btree_multimap
-  for(long i = 0;i < key_num;i++) {
+  for (long i = 0; i < key_num; i++) {
     test_map.insert(i, i);
   }
 
@@ -179,7 +183,8 @@ void TestBTreeMultimapInsertReadPerformance(int key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "stx::btree_multimap: " << (1.0 * key_num / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "stx::btree_multimap: "
+            << (1.0 * key_num / (1024 * 1024)) / elapsed_seconds.count()
             << " million insertion/sec" << "\n";
 
   ////////////////////////////////////////////
@@ -190,16 +195,16 @@ void TestBTreeMultimapInsertReadPerformance(int key_num) {
   start = std::chrono::system_clock::now();
 
   int iter = 10;
-  for(int j = 0;j < iter;j++) {
+  for (int j = 0; j < iter; j++) {
     // Read 1 million keys from stx::btree
-    for(int i = 0;i < key_num;i++) {
+    for (int i = 0; i < key_num; i++) {
       auto it_pair = test_map.equal_range(i);
 
       // For multimap we need to write an external loop to
       // extract all keys inside the multimap
       // This is the place where btree_multimap is slower than
       // btree
-      for(auto it = it_pair.first;it != it_pair.second;it++) {
+      for (auto it = it_pair.first; it != it_pair.second; it++) {
         v.push_back(it->second);
       }
 
@@ -210,12 +215,12 @@ void TestBTreeMultimapInsertReadPerformance(int key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "stx::btree_multimap " << (1.0 * iter * key_num / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "stx::btree_multimap "
+            << (1.0 * iter * key_num / (1024 * 1024)) / elapsed_seconds.count()
             << " million read/sec" << "\n";
 
   return;
 }
-
 
 /*
  * TestCuckooHashTableInsertReadPerformance() - Tests cuckoo hash table
@@ -229,7 +234,7 @@ void TestCuckooHashTableInsertReadPerformance(int key_num) {
   start = std::chrono::system_clock::now();
 
   // Insert 1 million keys into stx::btree_multimap
-  for(long i = 0;i < key_num;i++) {
+  for (long i = 0; i < key_num; i++) {
     test_map.insert(i, i);
   }
 
@@ -237,7 +242,8 @@ void TestCuckooHashTableInsertReadPerformance(int key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "cuckoohash_map: " << (1.0 * key_num / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "cuckoohash_map: "
+            << (1.0 * key_num / (1024 * 1024)) / elapsed_seconds.count()
             << " million insertion/sec" << "\n";
 
   ////////////////////////////////////////////
@@ -248,11 +254,11 @@ void TestCuckooHashTableInsertReadPerformance(int key_num) {
   start = std::chrono::system_clock::now();
 
   int iter = 10;
-  for(int j = 0;j < iter;j++) {
+  for (int j = 0; j < iter; j++) {
     // Read 1 million keys from stx::btree
-    for(int i = 0;i < key_num;i++) {
+    for (int i = 0; i < key_num; i++) {
       long int ret;
-      
+
       test_map.find(i, ret);
 
       v.push_back(ret);
@@ -264,7 +270,8 @@ void TestCuckooHashTableInsertReadPerformance(int key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "cuckoohash_map " << (1.0 * iter * key_num / (1024 * 1024)) / elapsed_seconds.count()
+  std::cout << "cuckoohash_map "
+            << (1.0 * iter * key_num / (1024 * 1024)) / elapsed_seconds.count()
             << " million read/sec" << "\n";
 
   return;
@@ -287,7 +294,7 @@ void TestBwTreeInsertReadDeletePerformance(TreeType *t, int key_num) {
   std::chrono::time_point<std::chrono::system_clock> start, end;
   start = std::chrono::system_clock::now();
 
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     t->Insert(i, i);
   }
 
@@ -295,7 +302,8 @@ void TestBwTreeInsertReadDeletePerformance(TreeType *t, int key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "BwTree: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "BwTree: "
+            << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million insertion/sec" << "\n";
 
   // Then test read performance
@@ -306,8 +314,8 @@ void TestBwTreeInsertReadDeletePerformance(TreeType *t, int key_num) {
 
   start = std::chrono::system_clock::now();
 
-  for(int j = 0;j < iter;j++) {
-    for(int i = 0;i < key_num;i++) {
+  for (int j = 0; j < iter; j++) {
+    for (int i = 0; i < key_num; i++) {
       t->GetValue(i, v);
 
       v.clear();
@@ -317,72 +325,75 @@ void TestBwTreeInsertReadDeletePerformance(TreeType *t, int key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "BwTree: " << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "BwTree: "
+            << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million read/sec" << "\n";
 
   ///////////////////////////////////////////////////////////////////
   // Test Iterator (forward, single value)
   ///////////////////////////////////////////////////////////////////
-  
+
   start = std::chrono::system_clock::now();
   {
-    for(int j = 0;j < iter;j++) {
+    for (int j = 0; j < iter; j++) {
       auto it = t->Begin();
-      while(it.IsEnd() == false) {
+      while (it.IsEnd() == false) {
         v.push_back(it->second);
 
         v.clear();
         it++;
       }
-      
+
       it--;
-      if(it->first != key_num - 1) {
+      if (it->first != key_num - 1) {
         throw "Error: Forward iterating does not reach the end";
-      } 
+      }
     }
 
     end = std::chrono::system_clock::now();
 
     elapsed_seconds = end - start;
-    std::cout << "BwTree: " << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+    std::cout << "BwTree: "
+              << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
               << " million forward iteration/sec" << "\n";
   }
-  
+
   ///////////////////////////////////////////////////////////////////
   // Test Iterator (backward, single value)
   ///////////////////////////////////////////////////////////////////
-  
+
   start = std::chrono::system_clock::now();
   {
-    for(int j = 0;j < iter;j++) {
+    for (int j = 0; j < iter; j++) {
       auto it = t->Begin(key_num - 1);
-      while(it.IsREnd() == false) {
+      while (it.IsREnd() == false) {
         v.push_back(it->second);
 
         v.clear();
         it--;
       }
-      
+
       it++;
-      if(it->first != 0) {
+      if (it->first != 0) {
         throw "Error: Forward iterating does not reach the beginning";
-      } 
+      }
     }
-    
+
     end = std::chrono::system_clock::now();
 
     elapsed_seconds = end - start;
-    std::cout << "BwTree: " << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+    std::cout << "BwTree: "
+              << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
               << " million backward iteration/sec" << "\n";
   }
-  
+
   ///////////////////////////////////////////////////////////////////
   // Insert 2nd value
   ///////////////////////////////////////////////////////////////////
-  
+
   start = std::chrono::system_clock::now();
 
-  for(int i = key_num - 1;i >= 0;i--) {
+  for (int i = key_num - 1; i >= 0; i--) {
     t->Insert(i, i + 1);
   }
 
@@ -390,15 +401,16 @@ void TestBwTreeInsertReadDeletePerformance(TreeType *t, int key_num) {
 
   elapsed_seconds = end - start;
 
-  std::cout << "BwTree: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "BwTree: "
+            << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million insertion (reverse order)/sec" << "\n";
 
   // Read again
 
   start = std::chrono::system_clock::now();
 
-  for(int j = 0;j < iter;j++) {
-    for(int i = 0;i < key_num;i++) {
+  for (int j = 0; j < iter; j++) {
+    for (int i = 0; i < key_num; i++) {
       t->GetValue(i, v);
 
       v.clear();
@@ -408,18 +420,19 @@ void TestBwTreeInsertReadDeletePerformance(TreeType *t, int key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "BwTree: " << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "BwTree: "
+            << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million read (2 values)/sec" << "\n";
 
   // Verify reads
 
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     t->GetValue(i, v);
 
     assert(v.size() == 2);
-    if(v[0] == (i)) {
+    if (v[0] == (i)) {
       assert(v[1] == (i + 1));
-    } else if(v[0] == (i + 1)) {
+    } else if (v[0] == (i + 1)) {
       assert(v[1] == (i));
     } else {
       assert(false);
@@ -434,21 +447,22 @@ void TestBwTreeInsertReadDeletePerformance(TreeType *t, int key_num) {
 
   start = std::chrono::system_clock::now();
 
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     t->Delete(i, i);
   }
 
-  for(int i = key_num - 1;i >= 0;i--) {
+  for (int i = key_num - 1; i >= 0; i--) {
     t->Delete(i, i + 1);
   }
 
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "BwTree: " << (key_num * 2 / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "BwTree: "
+            << (key_num * 2 / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million remove/sec" << "\n";
 
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     t->GetValue(i, v);
 
     assert(v.size() == 0);
@@ -466,7 +480,7 @@ void TestBwTreeInsertReadPerformance(TreeType *t, int key_num) {
   std::chrono::time_point<std::chrono::system_clock> start, end;
   start = std::chrono::system_clock::now();
 
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     t->Insert(i, i);
   }
 
@@ -474,7 +488,8 @@ void TestBwTreeInsertReadPerformance(TreeType *t, int key_num) {
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "BwTree: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "BwTree: "
+            << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million insertion/sec" << "\n";
 
   // Then test read performance
@@ -486,8 +501,8 @@ void TestBwTreeInsertReadPerformance(TreeType *t, int key_num) {
 
   start = std::chrono::system_clock::now();
 
-  for(int j = 0;j < iter;j++) {
-    for(int i = 0;i < key_num;i++) {
+  for (int j = 0; j < iter; j++) {
+    for (int i = 0; i < key_num; i++) {
       t->GetValue(i, v);
 
       v.clear();
@@ -497,7 +512,8 @@ void TestBwTreeInsertReadPerformance(TreeType *t, int key_num) {
   end = std::chrono::system_clock::now();
 
   elapsed_seconds = end - start;
-  std::cout << "BwTree: " << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "BwTree: "
+            << (iter * key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million read/sec" << "\n";
 
   return;
@@ -513,38 +529,38 @@ void TestBwTreeInsertReadPerformance(TreeType *t, int key_num) {
 void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t,
                                       std::string filename) {
   std::ifstream email_file{filename};
-  
+
   std::vector<std::string> string_list{};
-  
+
   // If unable to open file
-  if(email_file.good() == false) {
+  if (email_file.good() == false) {
     std::cout << "Unable to open file: " << filename << std::endl;
-    
+
     return;
   }
-  
+
   int counter = 0;
   std::string s{};
-  
+
   // Then load the line until reaches EOF
-  while(std::getline(email_file, s).good() == true) {
+  while (std::getline(email_file, s).good() == true) {
     string_list.push_back(s);
-    
+
     counter++;
   }
-    
+
   printf("Successfully loaded %d entries\n", counter);
-  
+
   ///////////////////////////////////////////////////////////////////
   // After this point we continue with insertion
   ///////////////////////////////////////////////////////////////////
-  
+
   int key_num = counter;
-  
+
   std::chrono::time_point<std::chrono::system_clock> start, end;
   start = std::chrono::system_clock::now();
 
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     t->Insert(string_list[i], i);
   }
 
@@ -552,13 +568,14 @@ void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t,
 
   std::chrono::duration<double> elapsed_seconds = end - start;
 
-  std::cout << "BwTree: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "BwTree: "
+            << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million email insertion/sec" << "\n";
-            
+
   print_flag = true;
   delete t;
   print_flag = false;
-            
+
   ///////////////////////////////////////////////////////////////////
   // Then test stx::btree_multimap
   ///////////////////////////////////////////////////////////////////
@@ -567,7 +584,7 @@ void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t,
 
   start = std::chrono::system_clock::now();
 
-  for(int i = 0;i < key_num;i++) {
+  for (int i = 0; i < key_num; i++) {
     bt.insert(string_list[i], i);
   }
 
@@ -575,8 +592,9 @@ void TestBwTreeEmailInsertPerformance(BwTree<std::string, long int> *t,
 
   elapsed_seconds = end - start;
 
-  std::cout << "stx::btree_multimap: " << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
+  std::cout << "stx::btree_multimap: "
+            << (key_num / (1024.0 * 1024.0)) / elapsed_seconds.count()
             << " million email insertion/sec" << "\n";
-            
+
   return;
 }

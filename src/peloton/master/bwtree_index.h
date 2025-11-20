@@ -12,9 +12,9 @@
 
 #pragma once
 
-#include <vector>
-#include <string>
 #include <map>
+#include <string>
+#include <vector>
 
 #include "catalog/manager.h"
 #include "common/platform.h"
@@ -23,34 +23,30 @@
 
 #include "index/bwtree.h"
 
-#define BWTREE_INDEX_TYPE BWTreeIndex <KeyType, \
-                                       ValueType, \
-                                       KeyComparator, \
-                                       KeyEqualityChecker, \
-                                       KeyHashFunc, \
-                                       ValueEqualityChecker, \
-                                       ValueHashFunc>
+#define BWTREE_INDEX_TYPE                                                      \
+  BWTreeIndex<KeyType, ValueType, KeyComparator, KeyEqualityChecker,           \
+              KeyHashFunc, ValueEqualityChecker, ValueHashFunc>
 
 namespace peloton {
 namespace index {
-  
+
 class ItemPointerComparator {
- public:
-  bool operator()(ItemPointer * const &p1, ItemPointer * const &p2) const {
+public:
+  bool operator()(ItemPointer *const &p1, ItemPointer *const &p2) const {
     return (p1->block == p2->block) && (p1->offset == p2->offset);
   }
-  
-  ItemPointerComparator(const ItemPointerComparator&) {}
+
+  ItemPointerComparator(const ItemPointerComparator &) {}
   ItemPointerComparator() {}
 };
 
 class ItemPointerHashFunc {
- public:
-  size_t operator()(ItemPointer * const &p) const {
+public:
+  size_t operator()(ItemPointer *const &p) const {
     return std::hash<oid_t>()(p->block) ^ std::hash<oid_t>()(p->offset);
   }
-  
-  ItemPointerHashFunc(const ItemPointerHashFunc&) {}
+
+  ItemPointerHashFunc(const ItemPointerHashFunc &) {}
   ItemPointerHashFunc() {}
 };
 
@@ -64,25 +60,16 @@ class ItemPointerHashFunc {
  *
  * @see Index
  */
-template <typename KeyType,
-          typename ValueType,
-          typename KeyComparator,
-          typename KeyEqualityChecker,
-          typename KeyHashFunc,
-          typename ValueEqualityChecker,
-          typename ValueHashFunc>
+template <typename KeyType, typename ValueType, typename KeyComparator,
+          typename KeyEqualityChecker, typename KeyHashFunc,
+          typename ValueEqualityChecker, typename ValueHashFunc>
 class BWTreeIndex : public Index {
   friend class IndexFactory;
 
-  using MapType = BwTree<KeyType,
-                         ValueType,
-                         KeyComparator,
-                         KeyEqualityChecker,
-                         KeyHashFunc,
-                         ValueEqualityChecker,
-                         ValueHashFunc>;
+  using MapType = BwTree<KeyType, ValueType, KeyComparator, KeyEqualityChecker,
+                         KeyHashFunc, ValueEqualityChecker, ValueHashFunc>;
 
- public:
+public:
   BWTreeIndex(IndexMetadata *metadata);
 
   ~BWTreeIndex();
@@ -91,8 +78,7 @@ class BWTreeIndex : public Index {
 
   bool DeleteEntry(const storage::Tuple *key, const ItemPointer &location);
 
-  bool CondInsertEntry(const storage::Tuple *key,
-                       const ItemPointer &location,
+  bool CondInsertEntry(const storage::Tuple *key, const ItemPointer &location,
                        std::function<bool(const ItemPointer &)> predicate);
 
   void Scan(const std::vector<Value> &values,
@@ -113,8 +99,7 @@ class BWTreeIndex : public Index {
 
   void ScanAllKeys(std::vector<ItemPointer *> &result);
 
-  void ScanKey(const storage::Tuple *key,
-               std::vector<ItemPointer *> &result);
+  void ScanKey(const storage::Tuple *key, std::vector<ItemPointer *> &result);
 
   std::string GetTypeName() const;
 
@@ -124,15 +109,15 @@ class BWTreeIndex : public Index {
   // TODO: Implement this
   size_t GetMemoryFootprint() { return 0; }
 
- protected:
+protected:
   // equality checker and comparator
   KeyComparator comparator;
   KeyEqualityChecker equals;
   KeyHashFunc hash_func;
-  
+
   // container
   MapType container;
 };
 
-}  // End index namespace
-}  // End peloton namespace
+} // namespace index
+} // namespace peloton

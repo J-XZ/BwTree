@@ -1,0 +1,287 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/main.o",
+      "./test/main.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/main.cpp",
+    "output": "/root/BwTree/build/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/test_suite.o",
+      "./test/test_suite.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/test_suite.cpp",
+    "output": "/root/BwTree/build/test_suite.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/bwtree.o",
+      "./src/bwtree.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/src/bwtree.cpp",
+    "output": "/root/BwTree/build/bwtree.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/benchmark_bwtree_full.o",
+      "./test/benchmark_bwtree_full.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/benchmark_bwtree_full.cpp",
+    "output": "/root/BwTree/build/benchmark_bwtree_full.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/basic_test.o",
+      "./test/basic_test.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/basic_test.cpp",
+    "output": "/root/BwTree/build/basic_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/random_pattern_test.o",
+      "./test/random_pattern_test.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/random_pattern_test.cpp",
+    "output": "/root/BwTree/build/random_pattern_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/spinlock.o",
+      "./benchmark/spinlock/spinlock.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/benchmark/spinlock/spinlock.cpp",
+    "output": "/root/BwTree/build/spinlock.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/stress_test.o",
+      "./test/stress_test.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/stress_test.cpp",
+    "output": "/root/BwTree/build/stress_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/mixed_test.o",
+      "./test/mixed_test.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/mixed_test.cpp",
+    "output": "/root/BwTree/build/mixed_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/art.o",
+      "./benchmark/art/art.c"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/benchmark/art/art.c",
+    "output": "/root/BwTree/build/art.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/performance_test.o",
+      "./test/performance_test.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/performance_test.cpp",
+    "output": "/root/BwTree/build/performance_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/iterator_test.o",
+      "./test/iterator_test.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/iterator_test.cpp",
+    "output": "/root/BwTree/build/iterator_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/misc_test.o",
+      "./test/misc_test.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/misc_test.cpp",
+    "output": "/root/BwTree/build/misc_test.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/benchmark_art_full.o",
+      "./test/benchmark_art_full.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/benchmark_art_full.cpp",
+    "output": "/root/BwTree/build/benchmark_art_full.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-pthread",
+      "-std=c++11",
+      "-g",
+      "-Wall",
+      "-mcx16",
+      "-Wno-invalid-offsetof",
+      "-O0",
+      "-o",
+      "./build/benchmark_btree_full.o",
+      "./test/benchmark_btree_full.cpp"
+    ],
+    "directory": "/root/BwTree",
+    "file": "/root/BwTree/test/benchmark_btree_full.cpp",
+    "output": "/root/BwTree/build/benchmark_btree_full.o"
+  }
+]

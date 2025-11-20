@@ -1,16 +1,16 @@
 
-#include <cstdio>
 #include <cstddef>
+#include <cstdio>
 
 class A {
- public:
+public:
   int a;
   char b;
   int *c;
 };
 
 class B : public A {
- public:
+public:
   int d;
   int e;
   int f;

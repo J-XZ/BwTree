@@ -1,6 +1,6 @@
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 
@@ -10,7 +10,7 @@ int main() {
   int sz = sizeof(a) / sizeof(int);
   std::sort(a, a + sz);
 
-  for(int i = 0;i < sz;i++) {
+  for (int i = 0; i < sz; i++) {
     cout << a[i] << ' ';
   }
 
