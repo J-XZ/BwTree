@@ -30,5 +30,5 @@ thread_local int BwTreeBase::gc_id = -1;
 
 std::atomic<size_t> BwTreeBase::total_thread_num{0UL};
 
-} // End index/bwtree namespace
-} // End peloton/wangziqi2013 namespace
+}  // End index/bwtree namespace
+}  // End peloton/wangziqi2013 namespace

@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "index/bwtree_index.h"
+
 #include "common/logger.h"
 #include "index/index_key.h"
 #include "storage/tuple.h"
@@ -20,7 +21,7 @@ namespace index {
 
 BWTREE_TEMPLATE_ARGUMENTS
 BWTREE_INDEX_TYPE::BWTreeIndex(IndexMetadata *metadata)
-    : // Base class
+    :  // Base class
       Index{metadata},
       // Key "less than" relation comparator
       comparator{},
@@ -35,7 +36,9 @@ BWTREE_INDEX_TYPE::BWTreeIndex(IndexMetadata *metadata)
 }
 
 BWTREE_TEMPLATE_ARGUMENTS
-BWTREE_INDEX_TYPE::~BWTreeIndex() { return; }
+BWTREE_INDEX_TYPE::~BWTreeIndex() {
+  return;
+}
 
 /*
  * InsertEntry() - insert a key-value pair into the map
@@ -43,8 +46,7 @@ BWTREE_INDEX_TYPE::~BWTreeIndex() { return; }
  * If the key value pair already exists in the map, just return false
  */
 BWTREE_TEMPLATE_ARGUMENTS
-bool BWTREE_INDEX_TYPE::InsertEntry(const storage::Tuple *key,
-                                    const ItemPointer &location) {
+bool BWTREE_INDEX_TYPE::InsertEntry(const storage::Tuple *key, const ItemPointer &location) {
   KeyType index_key;
   index_key.SetFromKey(key);
 
@@ -66,8 +68,7 @@ bool BWTREE_INDEX_TYPE::InsertEntry(const storage::Tuple *key,
  * If the key-value pair does not exists yet in the map return false
  */
 BWTREE_TEMPLATE_ARGUMENTS
-bool BWTREE_INDEX_TYPE::DeleteEntry(const storage::Tuple *key,
-                                    const ItemPointer &location) {
+bool BWTREE_INDEX_TYPE::DeleteEntry(const storage::Tuple *key, const ItemPointer &location) {
   KeyType index_key;
   index_key.SetFromKey(key);
 
@@ -91,9 +92,8 @@ bool BWTREE_INDEX_TYPE::DeleteEntry(const storage::Tuple *key,
 }
 
 BWTREE_TEMPLATE_ARGUMENTS
-bool BWTREE_INDEX_TYPE::CondInsertEntry(
-    const storage::Tuple *key, const ItemPointer &location,
-    std::function<bool(const ItemPointer &)> predicate) {
+bool BWTREE_INDEX_TYPE::CondInsertEntry(const storage::Tuple *key, const ItemPointer &location,
+                                        std::function<bool(const ItemPointer &)> predicate) {
   KeyType index_key;
   index_key.SetFromKey(key);
 
@@ -103,8 +103,7 @@ bool BWTREE_INDEX_TYPE::CondInsertEntry(
   // This function will complete them in one step
   // predicate will be set to nullptr if the predicate
   // returns true for some value
-  bool ret = container.ConditionalInsert(index_key, item_p, predicate,
-                                         &predicate_satisfied);
+  bool ret = container.ConditionalInsert(index_key, item_p, predicate, &predicate_satisfied);
 
   // If predicate is not satisfied then we know insertion successes
   if (predicate_satisfied == false) {
@@ -130,8 +129,8 @@ void BWTREE_INDEX_TYPE::Scan(const std::vector<Value> &values,
   // Checkif we have leading (leftmost) column equality
   // refer : http://www.postgresql.org/docs/8.2/static/indexes-multicolumn.html
   oid_t leading_column_id = 0;
-  auto key_column_ids_itr = std::find(key_column_ids.begin(),
-                                      key_column_ids.end(), leading_column_id);
+  auto key_column_ids_itr =
+      std::find(key_column_ids.begin(), key_column_ids.end(), leading_column_id);
 
   // SPECIAL CASE : leading column id is one of the key column ids
   // and is involved in a equality constraint
@@ -156,8 +155,8 @@ void BWTREE_INDEX_TYPE::Scan(const std::vector<Value> &values,
     start_key.reset(new storage::Tuple(metadata->GetKeySchema(), true));
 
     // Construct the lower bound key tuple
-    all_constraints_are_equal = ConstructLowerBoundTuple(
-        start_key.get(), values, key_column_ids, expr_types);
+    all_constraints_are_equal =
+        ConstructLowerBoundTuple(start_key.get(), values, key_column_ids, expr_types);
 
     LOG_TRACE("All constraints are equal : %d ", all_constraints_are_equal);
 
@@ -191,35 +190,33 @@ void BWTREE_INDEX_TYPE::Scan(const std::vector<Value> &values,
   // printf("Start scanning\n");
 
   switch (scan_direction) {
-  case SCAN_DIRECTION_TYPE_FORWARD:
-  case SCAN_DIRECTION_TYPE_BACKWARD: {
-    // Scan the index entries in forward direction
-    for (auto scan_itr = scan_begin_itr; scan_itr.IsEnd() == false;
-         scan_itr++) {
-      KeyType &scan_current_key = const_cast<KeyType &>(scan_itr->first);
+    case SCAN_DIRECTION_TYPE_FORWARD:
+    case SCAN_DIRECTION_TYPE_BACKWARD: {
+      // Scan the index entries in forward direction
+      for (auto scan_itr = scan_begin_itr; scan_itr.IsEnd() == false; scan_itr++) {
+        KeyType &scan_current_key = const_cast<KeyType &>(scan_itr->first);
 
-      auto tuple =
-          scan_current_key.GetTupleForComparison(metadata->GetKeySchema());
+        auto tuple = scan_current_key.GetTupleForComparison(metadata->GetKeySchema());
 
-      // Compare the current key in the scan with "values" based on
-      // "expression types"
-      // For instance, "5" EXPR_GREATER_THAN "2" is true
-      if (Compare(tuple, key_column_ids, expr_types, values) == true) {
-        result.push_back(*(scan_itr->second));
-      } else {
-        // We can stop scanning if we know that all constraints are equal
-        if (all_constraints_are_equal == true) {
-          break;
+        // Compare the current key in the scan with "values" based on
+        // "expression types"
+        // For instance, "5" EXPR_GREATER_THAN "2" is true
+        if (Compare(tuple, key_column_ids, expr_types, values) == true) {
+          result.push_back(*(scan_itr->second));
+        } else {
+          // We can stop scanning if we know that all constraints are equal
+          if (all_constraints_are_equal == true) {
+            break;
+          }
         }
       }
-    }
 
-  } break;
+    } break;
 
-  case SCAN_DIRECTION_TYPE_INVALID:
-  default:
-    throw Exception("Invalid scan direction \n");
-    break;
+    case SCAN_DIRECTION_TYPE_INVALID:
+    default:
+      throw Exception("Invalid scan direction \n");
+      break;
   }
 
   return;
@@ -239,8 +236,7 @@ void BWTREE_INDEX_TYPE::ScanAllKeys(std::vector<ItemPointer> &result) {
 }
 
 BWTREE_TEMPLATE_ARGUMENTS
-void BWTREE_INDEX_TYPE::ScanKey(const storage::Tuple *key,
-                                std::vector<ItemPointer> &result) {
+void BWTREE_INDEX_TYPE::ScanKey(const storage::Tuple *key, std::vector<ItemPointer> &result) {
   KeyType index_key;
   index_key.SetFromKey(key);
 
@@ -266,8 +262,8 @@ void BWTREE_INDEX_TYPE::Scan(const std::vector<Value> &values,
   // Checkif we have leading (leftmost) column equality
   // refer : http://www.postgresql.org/docs/8.2/static/indexes-multicolumn.html
   oid_t leading_column_id = 0;
-  auto key_column_ids_itr = std::find(key_column_ids.begin(),
-                                      key_column_ids.end(), leading_column_id);
+  auto key_column_ids_itr =
+      std::find(key_column_ids.begin(), key_column_ids.end(), leading_column_id);
 
   // SPECIAL CASE : leading column id is one of the key column ids
   // and is involved in a equality constraint
@@ -292,8 +288,8 @@ void BWTREE_INDEX_TYPE::Scan(const std::vector<Value> &values,
     start_key.reset(new storage::Tuple(metadata->GetKeySchema(), true));
 
     // Construct the lower bound key tuple
-    all_constraints_are_equal = ConstructLowerBoundTuple(
-        start_key.get(), values, key_column_ids, expr_types);
+    all_constraints_are_equal =
+        ConstructLowerBoundTuple(start_key.get(), values, key_column_ids, expr_types);
 
     LOG_TRACE("All constraints are equal : %d ", all_constraints_are_equal);
 
@@ -319,35 +315,33 @@ void BWTREE_INDEX_TYPE::Scan(const std::vector<Value> &values,
   }
 
   switch (scan_direction) {
-  case SCAN_DIRECTION_TYPE_FORWARD:
-  case SCAN_DIRECTION_TYPE_BACKWARD: {
-    // Scan the index entries in forward direction
-    for (auto scan_itr = scan_begin_itr; scan_itr.IsEnd() == false;
-         scan_itr++) {
-      KeyType &scan_current_key = const_cast<KeyType &>(scan_itr->first);
+    case SCAN_DIRECTION_TYPE_FORWARD:
+    case SCAN_DIRECTION_TYPE_BACKWARD: {
+      // Scan the index entries in forward direction
+      for (auto scan_itr = scan_begin_itr; scan_itr.IsEnd() == false; scan_itr++) {
+        KeyType &scan_current_key = const_cast<KeyType &>(scan_itr->first);
 
-      auto tuple =
-          scan_current_key.GetTupleForComparison(metadata->GetKeySchema());
+        auto tuple = scan_current_key.GetTupleForComparison(metadata->GetKeySchema());
 
-      // Compare the current key in the scan with "values" based on
-      // "expression types"
-      // For instance, "5" EXPR_GREATER_THAN "2" is true
-      if (Compare(tuple, key_column_ids, expr_types, values) == true) {
-        result.push_back(scan_itr->second);
-      } else {
-        // We can stop scanning if we know that all constraints are equal
-        if (all_constraints_are_equal == true) {
-          break;
+        // Compare the current key in the scan with "values" based on
+        // "expression types"
+        // For instance, "5" EXPR_GREATER_THAN "2" is true
+        if (Compare(tuple, key_column_ids, expr_types, values) == true) {
+          result.push_back(scan_itr->second);
+        } else {
+          // We can stop scanning if we know that all constraints are equal
+          if (all_constraints_are_equal == true) {
+            break;
+          }
         }
       }
-    }
 
-  } break;
+    } break;
 
-  case SCAN_DIRECTION_TYPE_INVALID:
-  default:
-    throw Exception("Invalid scan direction \n");
-    break;
+    case SCAN_DIRECTION_TYPE_INVALID:
+    default:
+      throw Exception("Invalid scan direction \n");
+      break;
   }
 
   return;
@@ -367,8 +361,7 @@ void BWTREE_INDEX_TYPE::ScanAllKeys(std::vector<ItemPointer *> &result) {
 }
 
 BWTREE_TEMPLATE_ARGUMENTS
-void BWTREE_INDEX_TYPE::ScanKey(const storage::Tuple *key,
-                                std::vector<ItemPointer *> &result) {
+void BWTREE_INDEX_TYPE::ScanKey(const storage::Tuple *key, std::vector<ItemPointer *> &result) {
   KeyType index_key;
   index_key.SetFromKey(key);
 
@@ -379,7 +372,9 @@ void BWTREE_INDEX_TYPE::ScanKey(const storage::Tuple *key,
 }
 
 BWTREE_TEMPLATE_ARGUMENTS
-std::string BWTREE_INDEX_TYPE::GetTypeName() const { return "BWTree"; }
+std::string BWTREE_INDEX_TYPE::GetTypeName() const {
+  return "BWTree";
+}
 
 // NOTE: If ints key is used as an optimization just uncommend
 // the following in order to instanciation the template before it is
@@ -418,26 +413,24 @@ template class BWTreeIndex<IntsKey<4>,
 
 // Generic key
 template class BWTreeIndex<GenericKey<4>, ItemPointer *, GenericComparator<4>,
-                           GenericEqualityChecker<4>, GenericHasher<4>,
-                           ItemPointerComparator, ItemPointerHashFunc>;
+                           GenericEqualityChecker<4>, GenericHasher<4>, ItemPointerComparator,
+                           ItemPointerHashFunc>;
 template class BWTreeIndex<GenericKey<8>, ItemPointer *, GenericComparator<8>,
-                           GenericEqualityChecker<8>, GenericHasher<8>,
-                           ItemPointerComparator, ItemPointerHashFunc>;
+                           GenericEqualityChecker<8>, GenericHasher<8>, ItemPointerComparator,
+                           ItemPointerHashFunc>;
 template class BWTreeIndex<GenericKey<16>, ItemPointer *, GenericComparator<16>,
-                           GenericEqualityChecker<16>, GenericHasher<16>,
-                           ItemPointerComparator, ItemPointerHashFunc>;
+                           GenericEqualityChecker<16>, GenericHasher<16>, ItemPointerComparator,
+                           ItemPointerHashFunc>;
 template class BWTreeIndex<GenericKey<64>, ItemPointer *, GenericComparator<64>,
-                           GenericEqualityChecker<64>, GenericHasher<64>,
-                           ItemPointerComparator, ItemPointerHashFunc>;
-template class BWTreeIndex<GenericKey<256>, ItemPointer *,
-                           GenericComparator<256>, GenericEqualityChecker<256>,
-                           GenericHasher<256>, ItemPointerComparator,
+                           GenericEqualityChecker<64>, GenericHasher<64>, ItemPointerComparator,
+                           ItemPointerHashFunc>;
+template class BWTreeIndex<GenericKey<256>, ItemPointer *, GenericComparator<256>,
+                           GenericEqualityChecker<256>, GenericHasher<256>, ItemPointerComparator,
                            ItemPointerHashFunc>;
 
 // Tuple key
-template class BWTreeIndex<TupleKey, ItemPointer *, TupleKeyComparator,
-                           TupleKeyEqualityChecker, TupleKeyHasher,
-                           ItemPointerComparator, ItemPointerHashFunc>;
+template class BWTreeIndex<TupleKey, ItemPointer *, TupleKeyComparator, TupleKeyEqualityChecker,
+                           TupleKeyHasher, ItemPointerComparator, ItemPointerHashFunc>;
 
-} // namespace index
-} // namespace peloton
+}  // namespace index
+}  // namespace peloton

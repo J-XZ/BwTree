@@ -4,8 +4,8 @@
 #ifndef _SPINLOCK_H
 #define _SPINLOCK_H
 
-#include<atomic>
-#include<cassert>
+#include <atomic>
+#include <cassert>
 
 #define SPIN_LOCK_UNLOCK 0
 #define SPIN_LOCK_WRITE_LOCK -1

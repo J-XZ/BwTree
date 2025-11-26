@@ -14,6 +14,12 @@
  * do not use this function's result to test read (i.e. all read operations
  * are tested upon a sequentially populated BwTree instance)
  */
+/*
+- BenchmarkBwTreeRandInsert() - 顾名思义，用于随机插入的基准测试。
+-
+- 注意，在这个函数中，我们不会传递一个 BwTree 实例，
+- 而是在函数内部创建并销毁对象，因为我们不会使用该函数的结果来测试读取操作
+- （即，所有读取操作都是在一个按顺序填充的 BwTree 实例上进行测试的）。*/
 void BenchmarkBwTreeRandInsert(int key_num, int thread_num) {
   // Get an empty trrr; do not print its construction message
   TreeType *t = GetEmptyTree(true);
@@ -25,10 +31,11 @@ void BenchmarkBwTreeRandInsert(int key_num, int thread_num) {
   }
 
   // This generates a permutation on [0, key_num)
+  // 这会生成一个 [0, key_num) 范围内的排列。
   Permutation<long long int> perm{(size_t)key_num, 0};
 
-  auto func = [key_num, &thread_time, thread_num, &perm](uint64_t thread_id,
-                                                         TreeType *t) {
+  auto func = [key_num, &thread_time, thread_num, &perm](uint64_t thread_id, TreeType *t) {
+    pthread_setname_np(pthread_self(), "BwtRandIns");
     long int start_key = key_num / thread_num * (long)thread_id;
     long int end_key = start_key + key_num / thread_num;
 
@@ -87,8 +94,7 @@ void BenchmarkBwTreeSeqInsert(TreeType *t, int key_num, int thread_num) {
     thread_time[i] = 0.0;
   }
 
-  auto func = [key_num, &thread_time, num_thread](uint64_t thread_id,
-                                                  TreeType *t) {
+  auto func = [key_num, &thread_time, num_thread](uint64_t thread_id, TreeType *t) {
     long int start_key = key_num / num_thread * (long)thread_id;
     long int end_key = start_key + key_num / num_thread;
 
@@ -106,8 +112,8 @@ void BenchmarkBwTreeSeqInsert(TreeType *t, int key_num, int thread_num) {
     thread_time[thread_id] = duration;
 
     std::cout << "[Thread " << thread_id << " Done] @ "
-              << (key_num / num_thread) / (1024.0 * 1024.0) / duration
-              << " million insert/sec" << "\n";
+              << (key_num / num_thread) / (1024.0 * 1024.0) / duration << " million insert/sec"
+              << "\n";
 
     // Print L3 total accesses and cache misses
     cache.PrintL3CacheUtilization();
@@ -124,8 +130,8 @@ void BenchmarkBwTreeSeqInsert(TreeType *t, int key_num, int thread_num) {
   }
 
   std::cout << num_thread << " Threads BwTree: overall "
-            << (key_num / (1024.0 * 1024.0) * num_thread) / elapsed_seconds
-            << " million insert/sec" << "\n";
+            << (key_num / (1024.0 * 1024.0) * num_thread) / elapsed_seconds << " million insert/sec"
+            << "\n";
 
   return;
 }
@@ -143,8 +149,7 @@ void BenchmarkBwTreeSeqRead(TreeType *t, int key_num, int thread_num) {
     thread_time[i] = 0.0;
   }
 
-  auto func = [key_num, iter, &thread_time, num_thread](uint64_t thread_id,
-                                                        TreeType *t) {
+  auto func = [key_num, iter, &thread_time, num_thread](uint64_t thread_id, TreeType *t) {
     std::vector<long> v{};
 
     v.reserve(1);
@@ -166,8 +171,7 @@ void BenchmarkBwTreeSeqRead(TreeType *t, int key_num, int thread_num) {
     thread_time[thread_id] = duration;
 
     std::cout << "[Thread " << thread_id << " Done] @ "
-              << (iter * key_num / (1024.0 * 1024.0)) / duration
-              << " million read/sec" << "\n";
+              << (iter * key_num / (1024.0 * 1024.0)) / duration << " million read/sec" << "\n";
 
     cache.PrintL3CacheUtilization();
     cache.PrintL1CacheUtilization();
@@ -183,8 +187,7 @@ void BenchmarkBwTreeSeqRead(TreeType *t, int key_num, int thread_num) {
   }
 
   std::cout << num_thread << " Threads BwTree: overall "
-            << (iter * key_num / (1024.0 * 1024.0) * num_thread * num_thread) /
-                   elapsed_seconds
+            << (iter * key_num / (1024.0 * 1024.0) * num_thread * num_thread) / elapsed_seconds
             << " million read/sec" << "\n";
 
   return;
@@ -203,8 +206,7 @@ void BenchmarkBwTreeRandRead(TreeType *t, int key_num, int thread_num) {
     thread_time[i] = 0.0;
   }
 
-  auto func2 = [key_num, iter, &thread_time, num_thread](uint64_t thread_id,
-                                                         TreeType *t) {
+  auto func2 = [key_num, iter, &thread_time, num_thread](uint64_t thread_id, TreeType *t) {
     std::vector<long> v{};
 
     v.reserve(1);
@@ -232,8 +234,8 @@ void BenchmarkBwTreeRandRead(TreeType *t, int key_num, int thread_num) {
     thread_time[thread_id] = duration;
 
     std::cout << "[Thread " << thread_id << " Done] @ "
-              << (iter * key_num / (1024.0 * 1024.0)) / duration
-              << " million read (random)/sec" << "\n";
+              << (iter * key_num / (1024.0 * 1024.0)) / duration << " million read (random)/sec"
+              << "\n";
 
     cache.PrintL3CacheUtilization();
     cache.PrintL1CacheUtilization();
@@ -249,8 +251,7 @@ void BenchmarkBwTreeRandRead(TreeType *t, int key_num, int thread_num) {
   }
 
   std::cout << num_thread << " Threads BwTree: overall "
-            << (iter * key_num / (1024.0 * 1024.0) * num_thread * num_thread) /
-                   elapsed_seconds
+            << (iter * key_num / (1024.0 * 1024.0) * num_thread * num_thread) / elapsed_seconds
             << " million read (random)/sec" << "\n";
 
   return;
@@ -281,8 +282,8 @@ void BenchmarkBwTreeZipfRead(TreeType *t, int key_num, int thread_num) {
     zipfian_key_list.push_back(zipf.Get());
   }
 
-  auto func2 = [key_num, iter, &thread_time, &zipfian_key_list,
-                num_thread](uint64_t thread_id, TreeType *t) {
+  auto func2 = [key_num, iter, &thread_time, &zipfian_key_list, num_thread](uint64_t thread_id,
+                                                                            TreeType *t) {
     // This is the start and end index we read into the zipfian array
     long int start_index = key_num / num_thread * (long)thread_id;
     long int end_index = start_index + key_num / num_thread;
@@ -310,8 +311,7 @@ void BenchmarkBwTreeZipfRead(TreeType *t, int key_num, int thread_num) {
     thread_time[thread_id] = duration;
 
     std::cout << "[Thread " << thread_id << " Done] @ "
-              << (iter * (end_index - start_index) / (1024.0 * 1024.0)) /
-                     duration
+              << (iter * (end_index - start_index) / (1024.0 * 1024.0)) / duration
               << " million read (zipfian)/sec" << "\n";
 
     cache.PrintL3CacheUtilization();
@@ -328,8 +328,7 @@ void BenchmarkBwTreeZipfRead(TreeType *t, int key_num, int thread_num) {
   }
 
   std::cout << num_thread << " Threads BwTree: overall "
-            << (iter * key_num / (1024.0 * 1024.0)) /
-                   (elapsed_seconds / num_thread)
+            << (iter * key_num / (1024.0 * 1024.0)) / (elapsed_seconds / num_thread)
             << " million read (zipfian)/sec" << "\n";
 
   return;

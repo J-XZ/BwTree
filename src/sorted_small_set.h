@@ -18,7 +18,7 @@
 template <typename ValueType, typename ValueComparator = std::less<ValueType>,
           typename ValueEqualityChecker = std::equal_to<ValueType>>
 class SortedSmallSet {
-private:
+ private:
   ValueType *data;
 
   // These two are only valid if the item count is not 0
@@ -28,13 +28,14 @@ private:
   ValueComparator value_cmp_obj;
   ValueEqualityChecker value_eq_obj;
 
-public:
-  SortedSmallSet(
-      ValueType *p_data,
-      const ValueComparator &p_value_cmp_obj = ValueComparator{},
-      const ValueEqualityChecker &p_value_eq_obj = ValueEqualityChecker{})
-      : data{p_data}, start_p{p_data}, end_p{p_data},
-        value_cmp_obj{p_value_cmp_obj}, value_eq_obj{p_value_eq_obj} {}
+ public:
+  SortedSmallSet(ValueType *p_data, const ValueComparator &p_value_cmp_obj = ValueComparator{},
+                 const ValueEqualityChecker &p_value_eq_obj = ValueEqualityChecker{})
+      : data{p_data},
+        start_p{p_data},
+        end_p{p_data},
+        value_cmp_obj{p_value_cmp_obj},
+        value_eq_obj{p_value_eq_obj} {}
 
   /*
    * Insert() - Inserts a value into the set

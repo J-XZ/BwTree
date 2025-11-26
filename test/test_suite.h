@@ -131,6 +131,15 @@ using Context = typename TreeType::Context;
  * tree_p is used to allocate thread local array for doing GC. In the meanwhile
  * if it is nullptr then we know we are not using BwTree, so just ignore this
  * argument
+
+- 功能：启动一组线程，并让它们并行执行同一个函数（可以带任意参数）。
+- 可变参数：这个函数是模板，可以接受任意数量和类型的参数，
+方便传递给每个线程的任务函数。
+- 只能定义在头文件：模板函数必须在头文件里定义，否则链接时会报错。
+- GC 相关：参数tree_p用于分配 BwTree
+的线程本地垃圾回收数组。如果tree_p是nullptr，说明当前测试不是针对
+BwTree（比如测试其它数据结构），就无需做 GC 相关的初始化。
+- 适用场景：既可以用于 BwTree，也可以用于其它数据结构的多线程测试，灵活通用。
  */
 template <typename Fn, typename... Args>
 void LaunchParallelTestID(TreeType *tree_p, uint64_t num_threads, Fn &&fn,

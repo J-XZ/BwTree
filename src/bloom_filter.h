@@ -29,8 +29,7 @@
 /*
  * class BloomFilter
  */
-template <typename ValueType,
-          typename ValueEqualityChecker = std::equal_to<ValueType>,
+template <typename ValueType, typename ValueEqualityChecker = std::equal_to<ValueType>,
           typename ValueHashFunc = std::hash<ValueType>>
 class BloomFilter {
   // The size of the bit field
@@ -52,7 +51,7 @@ class BloomFilter {
   // This is the mask for extracting byte offset inside the array
   static constexpr size_t BYTE_OFFSET_MASK = 0x00000000000000F8;
 
-private:
+ private:
 #ifdef BLOOM_FILTER_ENABLED
   unsigned char bit_array_0[FILTER_SIZE];
 #endif
@@ -67,7 +66,7 @@ private:
   // size_t
   ValueHashFunc value_hash_obj;
 
-public:
+ public:
   /*
    * Default Constructor - deleted
    * Copy Constructor - deleted
@@ -86,11 +85,12 @@ public:
    *
    * Seems that GCC unrolls it into movq instructions which is good
    */
-  inline BloomFilter(
-      const ValueType **p_data_p,
-      const ValueEqualityChecker &p_value_eq_obj = ValueEqualityChecker{},
-      const ValueHashFunc &p_value_hash_obj = ValueHashFunc{})
-      : data_p{p_data_p}, value_count{0}, value_eq_obj{p_value_eq_obj},
+  inline BloomFilter(const ValueType **p_data_p,
+                     const ValueEqualityChecker &p_value_eq_obj = ValueEqualityChecker{},
+                     const ValueHashFunc &p_value_hash_obj = ValueHashFunc{})
+      : data_p{p_data_p},
+        value_count{0},
+        value_eq_obj{p_value_eq_obj},
         value_hash_obj{p_value_hash_obj} {
 #ifdef BLOOM_FILTER_ENABLED
     memset(bit_array_0, 0, sizeof(bit_array_0));
@@ -137,8 +137,7 @@ public:
     value_count++;
 
 #ifdef BLOOM_FILTER_ENABLED
-    bit_array_0[(hash_value & BYTE_OFFSET_MASK) >> 3] |=
-        (0x1 << (hash_value & BIT_OFFSET_MASK));
+    bit_array_0[(hash_value & BYTE_OFFSET_MASK) >> 3] |= (0x1 << (hash_value & BIT_OFFSET_MASK));
 #endif
 
     return;
@@ -161,7 +160,6 @@ public:
    * data structure (e.g. simple linear array)
    */
   inline bool __ExistsScalar(const ValueType &value) {
-
 #ifdef BLOOM_FILTER_ENABLED
     register size_t hash_value = value_hash_obj(value);
 

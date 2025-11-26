@@ -22,14 +22,15 @@
  * then the destination is loaded into RDX:RAX. In both case RDX:RAX could
  * be loaded with the value in atomic variable.
  */
-template <typename T> class VersionedPointer {
-private:
+template <typename T>
+class VersionedPointer {
+ private:
   T *ptr;
 
   // Before each CAS we need to increase this version counter
   uint64_t version;
 
-public:
+ public:
   /*
    * Default Constructor
    *
@@ -152,8 +153,9 @@ public:
  *    asking for unused NodeID). In the future it is unlinkly that we would
  *    add MultiThreadPush() or something like that
  */
-template <typename T, size_t STACK_SIZE> class AtomicStack {
-private:
+template <typename T, size_t STACK_SIZE>
+class AtomicStack {
+ private:
   // This holds actual data
   T data[STACK_SIZE];
 
@@ -198,7 +200,7 @@ private:
     return snapshot_top_p;
   }
 
-public:
+ public:
   /*
    * Default Constructor
    *
@@ -324,8 +326,7 @@ public:
 
       // Then update the top pointer
       // Avoid ABA problem here by using double word compare and swap
-      bool cas_ret =
-          top_p.compare_exchange_strong(snapshot_top_p, new_snapshot_top_p);
+      bool cas_ret = top_p.compare_exchange_strong(snapshot_top_p, new_snapshot_top_p);
 
       // If CAS succeeds which indicates the pointer has not changed
       // since we took its snapshot, then just return

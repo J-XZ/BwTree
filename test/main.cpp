@@ -1,4 +1,6 @@
 
+#include <cassert>
+
 #include "test_suite.h"
 
 /*
@@ -141,13 +143,26 @@ int main(int argc, char **argv) {
 
   if (run_benchmark_btree_full == true) {
     BTreeType *t = GetEmptyBTree();
-    int key_num = 30 * 1024 * 1024;
 
-    printf("Using key size = %d (%f million)\n", key_num,
-           key_num / (1024.0 * 1024.0));
+    // int key_num = 30 * 1024 * 1024;
 
-    uint64_t thread_num = GetThreadNum();
+    int key_num = 102400;  // 测试，少量数据，避免运行时间过长和内存不足
 
+    printf("Using key size = %d (%f million)\n", key_num, key_num / (1024.0 * 1024.0));
+
+    uint64_t thread_num = GetThreadNum();  // 从环境变量 THREAD_NUM 获取线程数
+
+    // 默认配置下树的类型是<long,long>
+    BenchmarkBTreeSeqInsert(t, key_num, (int)thread_num);
+
+    {  // 简单单线程测试键删除
+      for (int i = 0; i < key_num; i += 1) {
+        auto x = t->erase(i);
+        assert(x > 0);
+      }
+    }
+
+    // 删除后重新插入，确保后续的测试有数据
     BenchmarkBTreeSeqInsert(t, key_num, (int)thread_num);
 
     // Let this go before any of the other
@@ -162,16 +177,17 @@ int main(int argc, char **argv) {
   }
 
   if (run_benchmark_bwtree == true || run_benchmark_bwtree_full == true) {
-    t1 = GetEmptyTree();
+    t1 = GetEmptyTree(false);
 
-    int key_num = 3 * 1024 * 1024;
+    // int key_num = 3 * 1024 * 1024;
 
-    if (run_benchmark_bwtree_full == true) {
-      key_num *= 10;
-    }
+    // if (run_benchmark_bwtree_full == true) {
+    //   key_num *= 10;
+    // }
 
-    printf("Using key size = %d (%f million)\n", key_num,
-           key_num / (1024.0 * 1024.0));
+    auto key_num = 102400;  // 测试，少量数据，避免运行时间过长和内存不足
+
+    printf("Using key size = %d (%f million)\n", key_num, key_num / (1024.0 * 1024.0));
 
     uint64_t thread_num = GetThreadNum();
 
@@ -223,8 +239,7 @@ int main(int argc, char **argv) {
     t1 = GetEmptyTree();
 
     int key_num = 1024 * 1024 * 3;
-    printf("Using key size = %d (%f million)\n", key_num,
-           key_num / (1024.0 * 1024.0));
+    printf("Using key size = %d (%f million)\n", key_num, key_num / (1024.0 * 1024.0));
 
     TestStdMapInsertReadPerformance(key_num);
     TestStdUnorderedMapInsertReadPerformance(key_num);
@@ -237,7 +252,6 @@ int main(int argc, char **argv) {
   }
 
   if (run_test == true) {
-
     /////////////////////////////////////////////////////////////////
     // Test iterator
     /////////////////////////////////////////////////////////////////

@@ -19,19 +19,18 @@
 #include "backend/catalog/manager.h"
 #include "backend/common/platform.h"
 #include "backend/common/types.h"
+#include "backend/index/bwtree.h"
 #include "backend/index/index.h"
 
-#include "backend/index/bwtree.h"
-
-#define BWTREE_INDEX_TYPE                                                      \
-  BWTreeIndex<KeyType, ValueType, KeyComparator, KeyEqualityChecker,           \
-              KeyHashFunc, ValueEqualityChecker, ValueHashFunc>
+#define BWTREE_INDEX_TYPE                                                         \
+  BWTreeIndex<KeyType, ValueType, KeyComparator, KeyEqualityChecker, KeyHashFunc, \
+              ValueEqualityChecker, ValueHashFunc>
 
 namespace peloton {
 namespace index {
 
 class ItemPointerComparator {
-public:
+ public:
   bool operator()(ItemPointer *const &p1, ItemPointer *const &p2) const {
     return (p1->block == p2->block) && (p1->offset == p2->offset);
   }
@@ -41,7 +40,7 @@ public:
 };
 
 class ItemPointerHashFunc {
-public:
+ public:
   size_t operator()(ItemPointer *const &p) const {
     return std::hash<oid_t>()(p->block) ^ std::hash<oid_t>()(p->offset);
   }
@@ -60,16 +59,15 @@ public:
  *
  * @see Index
  */
-template <typename KeyType, typename ValueType, typename KeyComparator,
-          typename KeyEqualityChecker, typename KeyHashFunc,
-          typename ValueEqualityChecker, typename ValueHashFunc>
+template <typename KeyType, typename ValueType, typename KeyComparator, typename KeyEqualityChecker,
+          typename KeyHashFunc, typename ValueEqualityChecker, typename ValueHashFunc>
 class BWTreeIndex : public Index {
   friend class IndexFactory;
 
-  using MapType = BwTree<KeyType, ValueType, KeyComparator, KeyEqualityChecker,
-                         KeyHashFunc, ValueEqualityChecker, ValueHashFunc>;
+  using MapType = BwTree<KeyType, ValueType, KeyComparator, KeyEqualityChecker, KeyHashFunc,
+                         ValueEqualityChecker, ValueHashFunc>;
 
-public:
+ public:
   BWTreeIndex(IndexMetadata *metadata);
 
   ~BWTreeIndex();
@@ -80,31 +78,23 @@ public:
   bool DeleteEntry(const storage::Tuple *key, const ItemPointer &location);
 
   bool CondInsertEntry(const storage::Tuple *key, const ItemPointer &location,
-                       std::function<bool(const void *)> predicate,
-                       ItemPointer **itemptr_ptr);
+                       std::function<bool(const void *)> predicate, ItemPointer **itemptr_ptr);
 
-  virtual bool InsertEntryInTupleIndex(const storage::Tuple *key,
-                                       ItemPointer *location);
-  virtual bool DeleteEntryInTupleIndex(const storage::Tuple *key,
-                                       ItemPointer *location);
-  virtual bool
-  CondInsertEntryInTupleIndex(const storage::Tuple *key, ItemPointer *location,
-                              std::function<bool(const void *)> predicate);
+  virtual bool InsertEntryInTupleIndex(const storage::Tuple *key, ItemPointer *location);
+  virtual bool DeleteEntryInTupleIndex(const storage::Tuple *key, ItemPointer *location);
+  virtual bool CondInsertEntryInTupleIndex(const storage::Tuple *key, ItemPointer *location,
+                                           std::function<bool(const void *)> predicate);
 
-  void Scan(const std::vector<Value> &values,
-            const std::vector<oid_t> &key_column_ids,
-            const std::vector<ExpressionType> &expr_types,
-            const ScanDirectionType &scan_direction,
+  void Scan(const std::vector<Value> &values, const std::vector<oid_t> &key_column_ids,
+            const std::vector<ExpressionType> &expr_types, const ScanDirectionType &scan_direction,
             std::vector<ItemPointer> &);
 
   void ScanAllKeys(std::vector<ItemPointer> &);
 
   void ScanKey(const storage::Tuple *key, std::vector<ItemPointer> &);
 
-  void Scan(const std::vector<Value> &values,
-            const std::vector<oid_t> &key_column_ids,
-            const std::vector<ExpressionType> &expr_types,
-            const ScanDirectionType &scan_direction,
+  void Scan(const std::vector<Value> &values, const std::vector<oid_t> &key_column_ids,
+            const std::vector<ExpressionType> &expr_types, const ScanDirectionType &scan_direction,
             std::vector<ItemPointer *> &result);
 
   void ScanAllKeys(std::vector<ItemPointer *> &result);
@@ -119,7 +109,7 @@ public:
   // TODO: Implement this
   size_t GetMemoryFootprint() { return 0; }
 
-protected:
+ protected:
   // equality checker and comparator
   KeyComparator comparator;
   KeyEqualityChecker equals;
@@ -129,5 +119,5 @@ protected:
   MapType container;
 };
 
-} // namespace index
-} // namespace peloton
+}  // namespace index
+}  // namespace peloton

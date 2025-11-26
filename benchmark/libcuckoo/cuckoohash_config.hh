@@ -31,4 +31,4 @@ const size_t NO_MAXIMUM_HASHPOWER = 0;
 //! set LIBCUCKOO_DEBUG to 1 to enable debug output
 #define LIBCUCKOO_DEBUG 0
 
-#endif // _CUCKOOHASH_CONFIG_HH
+#endif  // _CUCKOOHASH_CONFIG_HH

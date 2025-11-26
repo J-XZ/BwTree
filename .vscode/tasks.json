@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "运行 ./xz/1_build.sh",
+            "type": "shell",
+            "command": "./xz/1_build.sh",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "args": [
+                "0" // 如果不是初次运行，可以传入0，进行增量编译。如果是初次运行，应该传入1，强制重新运行cmake。
+            ]
+        }
+    ]
+}

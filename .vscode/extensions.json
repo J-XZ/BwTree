@@ -2,6 +2,9 @@
     "recommendations": [
         "llvm-vs-code-extensions.vscode-clangd",
         "mkhl.shfmt",
-        "jbockle.jbockle-format-files"
+        "jbockle.jbockle-format-files",
+        "uctakeoff.vscode-counter",
+        "vadimcn.vscode-lldb",
+        "cschlosser.doxdocgen"
     ]
 }
